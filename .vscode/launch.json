@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Serve workspace (http.server)",
+      "type": "python",
+      "request": "launch",
+      "module": "http.server",
+      "args": ["8000"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    }
+    ,
+    {
+      "name": "Run Flask app.py (port 8001)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/app.py",
+      "console": "integratedTerminal",
+      "env": {"FLASK_ENV": "development", "PORT": "8001"},
+      "args": []
+    }
+  ]
+}
