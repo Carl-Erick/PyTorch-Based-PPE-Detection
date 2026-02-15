@@ -1,0 +1,297 @@
+# PyTorch-Based PPE Detection System
+## Project Documentation - Sprint 1 Draft
+
+**Version:** 1.0  
+**Date:** February 15, 2025  
+**Group:** XX  
+**Status:** Sprint 1 - In Progress
+
+---
+
+## Executive Summary
+
+This project implements a comprehensive PyTorch-based Personal Protective Equipment (PPE) detection system. The system uses deep learning models to identify and classify PPE items (helmets, vests) in images. Sprint 1 focuses on establishing a robust codebase architecture with multiple model implementations, data pipelines, and training frameworks.
+
+## Project Objectives
+
+### Primary Goals
+1. Develop a flexible and extensible PPE detection system
+2. Implement multiple deep learning architectures (CNN, ResNet, YOLOv3)
+3. Create efficient data loading and augmentation pipelines
+4. Establish comprehensive training and evaluation framework
+5. Provide practical inference capabilities
+
+### Success Criteria
+- Code is modular, well-documented, and maintainable
+- Models achieve >85% accuracy on validation set
+- Inference speed <100ms per image
+- Complete documentation for all modules
+
+## Technical Architecture
+
+### System Components
+
+1. **Data Module** (`src/data/`)
+   - Dataset loading and batching
+   - Advanced data augmentation (rotation, flip, brightness, noise, blur)
+   - Image preprocessing and normalization
+   - Bounding box handling (YOLO format)
+
+2. **Model Module** (`src/models/`)
+   - SimplePPEClassifier: Lightweight CNN (1M parameters)
+   - PPEDetectionModel: ResNet50 with FPN (25M parameters)
+   - YOLOv3: Full implementation with Darknet-53 backbone
+   - YOLOv3Lite: Lightweight version for edge devices
+
+3. **Training Module** (`src/train.py`)
+   - Complete training loop with epoch-based training
+   - Validation pipeline
+   - Learning rate scheduling (ReduceLROnPlateau)
+   - Automatic checkpoint management
+
+4. **Utils Module** (`src/utils/`)
+   - Metric calculation (Accuracy, Precision, Recall, F1, IoU)
+   - Helper functions (seed setting, device management, checkpointing)
+   - Model utilities (parameter counting, gradient clipping)
+
+### Data Pipeline
+
+```
+Raw Image → Resize → Augmentation → Normalize → Tensor → Model
+                                ↓
+                        YOLO Annotations
+                                ↓
+                        Bounding Box Scaling
+```
+
+## Implemented Features
+
+### Data Loading
+- Custom PyTorch Dataset class supporting YOLO format
+- Efficient DataLoader with multi-worker support
+- Batch collation for object detection tasks
+- Memory-efficient streaming
+
+### Data Augmentation
+Using Albumentations library:
+- Horizontal/vertical flips (50% probability)
+- Rotation (±15 degrees)
+- Brightness/contrast adjustment
+- Gaussian noise and blur
+- Customizable augmentation pipelines
+
+### Models
+
+#### 1. SimplePPEClassifier
+Simple image classification model with 3 convolutional blocks.
+- Suitable for real-time applications
+- Fast inference on CPU/GPU
+- Minimal memory footprint
+
+#### 2. PPEDetectionModel (ResNet50 + FPN)
+Transfer learning-based model using ResNet50 backbone.
+- Feature Pyramid Network for multi-scale features
+- Classification and regression heads
+- Pre-trained ImageNet weights available
+
+#### 3. YOLOv3
+Full YOLOv3 implementation with:
+- Darknet-53 backbone
+- Multi-scale detection heads
+- State-of-the-art performance
+
+### Training Framework
+- Epoch-based training with progress bars
+- Validation after each epoch
+- Learning rate scheduling
+- Checkpoint saving (best model + regular intervals)
+- Training history tracking
+
+## Project Structure
+
+```
+Codebase_Sprint1/
+├── src/
+│   ├── data/          (Loading, augmentation, preprocessing)
+│   ├── models/        (Architecture definitions)
+│   ├── utils/         (Metrics, helpers)
+│   ├── train.py       (Training framework)
+│   └── __init__.py
+├── notebooks/         (Jupyter notebooks for exploration)
+├── main.py           (Training entry point)
+├── inference.py      (Prediction script)
+├── config.yaml       (Configuration file)
+├── generate_dataset.py (Sample data generator)
+├── requirements.txt  (Dependencies)
+└── README.md         (Comprehensive README)
+```
+
+## Configuration System
+
+The `config.yaml` file allows easy customization of:
+- Dataset paths and image sizes
+- Model architecture selection
+- Training hyperparameters (learning rate, batch size, epochs)
+- Augmentation settings
+- Logging and checkpoint preferences
+
+## Metrics & Evaluation
+
+### Classification Metrics
+- **Accuracy**: Overall correctness rate
+- **Precision**: True positive rate among predicted positives
+- **Recall**: True positive rate among actual positives
+- **Specificity**: True negative rate among actual negatives
+- **F1-Score**: Harmonic mean of precision and recall
+
+### Object Detection Metrics
+- **Intersection over Union (IoU)**: Box overlap measurement
+- **Mean IoU**: Average IoU across all predictions
+- **Average Precision (AP)**: Per-class performance
+
+## Dependencies
+
+Key libraries:
+- PyTorch 2.0.1
+- TorchVision 0.15.2
+- NumPy 1.24.3
+- OpenCV 4.8.0
+- Albumentations 1.3.0
+- PIL/Pillow 10.0.0
+
+## Sprint 1 Achievements
+
+✅ Complete project structure established  
+✅ Data loading and augmentation pipeline implemented  
+✅ Three model architectures implemented and integrated  
+✅ Training framework with validation pipeline  
+✅ Comprehensive metrics calculation  
+✅ Inference script for predictions  
+✅ Configuration management system  
+✅ Sample dataset generator  
+✅ Complete documentation  
+
+## Sprint 2 Planning
+
+### Planned Activities
+1. Real dataset integration and validation
+2. Model training with actual data
+3. Hyperparameter optimization
+4. Performance benchmarking
+5. Model compression and optimization
+6. Web API development
+7. Advanced testing and validation
+
+### Expected Deliverables
+- Trained model weights
+- Performance report with metrics
+- Deployment guide
+- API documentation
+- User manual
+
+## Challenges & Mitigations
+
+### Challenge: Dataset Availability
+- **Mitigation**: Created sample dataset generator for development/testing
+
+### Challenge: Model Selection
+- **Mitigation**: Implemented multiple architectures for comparison
+
+### Challenge: Training Speed
+- **Mitigation**: Included lightweight models and optimization techniques
+
+## Code Quality & Standards
+
+### Documentation
+- ✓ Module-level docstrings
+- ✓ Function/method docstrings with parameter descriptions
+- ✓ Type hints for better code clarity
+- ✓ Comprehensive README
+
+### Code Organization
+- ✓ Separation of concerns (data, models, training)
+- ✓ Reusable components
+- ✓ Configuration-driven setup
+- ✓ Error handling and logging
+
+### Testing
+- Code runs without errors
+- All modules are importable
+- Sample dataset generation works
+- Configuration loading functions correctly
+
+## Usage Examples
+
+### Training
+```bash
+python main.py --model simple --epochs 50 --batch_size 32
+```
+
+### Inference
+```bash
+python inference.py --model checkpoints/best_model.pth --image path/to/image.jpg
+```
+
+### Dataset Generation
+```bash
+python generate_dataset.py
+```
+
+## Future Enhancements
+
+1. **Model Improvements**
+   - Transfer learning with larger datasets
+   - Ensemble methods
+   - Model distillation for edge deployment
+
+2. **Deployment**
+   - REST API using FastAPI/Flask
+   - Docker containerization
+   - Mobile app development
+   - Edge device optimization
+
+3. **Advanced Features**
+   - Real-time video processing
+   - Multi-PPE detection
+   - Confidence threshold optimization
+   - Alert system for non-compliance
+
+## Conclusion
+
+Sprint 1 establishes a solid foundation for the PPE detection system. The codebase is modular, well-documented, and ready for integration with real datasets. The architecture supports multiple model types and provides flexibility for future enhancements.
+
+## References
+
+1. Redmon, J., & Farhadi, A. (2018). YOLOv3: An Incremental Improvement.
+2. He, K., et al. (2016). Deep Residual Learning for Image Recognition.
+3. Lin, T. Y., et al. (2017). Feature Pyramid Networks for Object Detection.
+4. PyTorch Documentation: https://pytorch.org/docs/
+
+## Appendix: File Listing
+
+### Source Code Files
+- `src/data/loader.py`: Data loading utilities
+- `src/data/augmentation.py`: Augmentation pipeline
+- `src/data/preprocessing.py`: Preprocessing utilities
+- `src/models/ppemodel.py`: PPE detection models
+- `src/models/yolov3.py`: YOLOv3 implementation
+- `src/utils/helpers.py`: Helper functions
+- `src/utils/metrics.py`: Metric calculations
+- `src/train.py`: Training framework
+
+### Configuration & Scripts
+- `main.py`: Training entry point
+- `inference.py`: Prediction script
+- `config.yaml`: Configuration file
+- `generate_dataset.py`: Sample dataset generator
+
+### Documentation
+- `README.md`: Comprehensive project guide
+- `ProjectSchedule.txt`: Sprint timeline
+- `Dataset_Sample/README.txt`: Dataset information
+
+---
+
+**Document Status**: DRAFT - Sprint 1  
+**Last Updated**: February 15, 2025  
+**Next Review**: End of Sprint 2
