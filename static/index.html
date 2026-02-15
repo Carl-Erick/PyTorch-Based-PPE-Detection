@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PPE Detection — Real-time Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:20px}
+      .chart-container{width:100%;max-width:900px;margin:0 auto}
+    </style>
+  </head>
+  <body>
+    <h2>Real-time Line Graph (SSE)</h2>
+    <div class="chart-container">
+      <canvas id="rtChart" height="200"></canvas>
+    </div>
+
+    <h3>Browse Workspace</h3>
+    <ul>
+      <li><a href="/files/dataset/">Dataset_Sample</a> — root dataset folder</li>
+      <li><a href="/files/output/">output_analysis</a> — analysis outputs</li>
+    </ul>
+
+    <script>
+      const ctx = document.getElementById('rtChart').getContext('2d');
+      const data = {labels: [], datasets:[{label:'value',borderColor:'#007bff',backgroundColor:'rgba(0,123,255,0.1)',data:[]} ] };
+      const cfg = {type:'line',data:data,options:{animation:false,scales:{x:{type:'time',time:{unit:'second'}},y:{beginAtZero:true}}}};
+      const chart = new Chart(ctx,cfg);
+
+      const es = new EventSource('/stream');
+      es.onmessage = (e) => {
+        try {
+          const obj = JSON.parse(e.data);
+          const t = new Date(obj.t);
+          data.labels.push(t);
+          data.datasets[0].data.push(obj.v);
+          // keep last 60 points
+          if (data.labels.length > 60) { data.labels.shift(); data.datasets[0].data.shift(); }
+          chart.update('none');
+        } catch(err) { console.error(err); }
+      };
+      es.onerror = (err) => { console.error('EventSource failed', err); };
+    </script>
+  </body>
+</html>

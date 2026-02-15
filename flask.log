@@ -1,0 +1,19 @@
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://10.0.0.4:8001
+Press CTRL+C to quit
+127.0.0.1 - - [15/Feb/2026 12:23:33] "GET /files/dataset/ HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 12:23:40] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 12:23:41] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [15/Feb/2026 12:23:42] "GET /files/dataset/ HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 12:23:44] "GET /files/dataset/README.txt HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 12:23:46] "GET /files/dataset/images/ HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 12:23:47] "GET /files/dataset/image_0002.jpg HTTP/1.1" 404 -
+127.0.0.1 - - [15/Feb/2026 12:23:49] "GET /files/dataset/image_0001.jpg HTTP/1.1" 404 -
+127.0.0.1 - - [15/Feb/2026 12:23:52] "GET /files/output/ HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 12:23:52] "GET /files/output/statistics.png HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 12:23:55] "GET /files/output/sample_image.png HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 12:23:58] "GET /files/output/image_sizes.png HTTP/1.1" 200 -
