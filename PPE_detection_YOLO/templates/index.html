@@ -36,27 +36,7 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            animation: slideIn 0.8s ease-out;
-        }
-
-        .card h2 {
+        header h2 {
             color: #667eea;
             margin-bottom: 20px;
             font-size: 1.8em;
@@ -658,7 +638,7 @@
             clearImageSuccess();
 
             try {
-                const response = await fetch('/api/detect-image', {
+                const response = await fetch('/api/detect', {
                     method: 'POST',
                     body: formData
                 });
@@ -666,7 +646,6 @@
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    currentImageOutput = data.output_file;
                     displayImageResults(data);
                     showImageSuccess('Detection completed successfully!');
                 } else {
@@ -695,35 +674,24 @@
             clearVideoSuccess();
 
             try {
-                const response = await fetch('/api/detect-video', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    currentVideoOutput = data.output_file;
-                    displayVideoResults(data);
-                    showVideoSuccess('Video processed successfully!');
-                } else {
-                    showVideoError(data.error || 'Video processing failed');
-                }
+                // backend does not support video uploads in demo mode
+                showVideoError('Video processing is not available in this demo.');
             } catch (error) {
                 showVideoError('Error: ' + error.message);
             } finally {
                 document.getElementById('videoProgress').classList.remove('show');
                 document.getElementById('detectVideoBtn').disabled = false;
             }
+            }
         }
 
         function displayImageResults(data) {
             document.getElementById('resultImage').src = data.image;
-            document.getElementById('totalDetections').textContent = data.statistics.total_detections;
-            document.getElementById('helmetCount').textContent = data.statistics.helmet_count;
-            document.getElementById('vestCount').textContent = data.statistics.vest_count;
-            document.getElementById('bootsCount').textContent = data.statistics.boots_count;
-            document.getElementById('avgConfidence').textContent = (data.statistics.avg_confidence * 100).toFixed(1) + '%';
+            document.getElementById('totalDetections').textContent = data.total_detections;
+            document.getElementById('helmetCount').textContent = data.helmet_count;
+            document.getElementById('vestCount').textContent = data.vest_count;
+            document.getElementById('bootsCount').textContent = data.boots_count;
+            document.getElementById('avgConfidence').textContent = (data.avg_confidence * 100).toFixed(1) + '%';
 
             // Display detections list
             const detectionsList = document.getElementById('detectionsList');

@@ -60,6 +60,12 @@ def index():
 
 
 @app.route('/api/detect', methods=['POST'])
+
+# alias for older frontend
+@app.route('/api/detect-image', methods=['POST'])
+def detect_ppe_alias():
+    return detect_ppe()
+
 def detect_ppe():
     """Detect PPE in uploaded image"""
     try:
