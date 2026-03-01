@@ -361,9 +361,9 @@
         </header>
 
         <div class="tab-container">
-            <button class="tab-btn active" onclick="switchTab('image')">Image Detection</button>
-            <button class="tab-btn" onclick="switchTab('video')">Video Detection</button>
-            <button class="tab-btn" onclick="switchTab('info')">System Info</button>
+            <button class="tab-btn active" onclick="switchTab('image', this)">Image Detection</button>
+            <button class="tab-btn" onclick="switchTab('video', this)">Video Detection</button>
+            <button class="tab-btn" onclick="switchTab('info', this)">System Info</button>
         </div>
 
         <div class="main-content">
@@ -751,7 +751,7 @@
             document.getElementById('videoResults').classList.remove('show');
         }
 
-        function switchTab(tabName) {
+        function switchTab(tabName, btn) {
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
@@ -762,8 +762,7 @@
 
             // Show selected tab
             document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-
+    if (btn) btn.classList.add('active');
             // Load system info if info tab
             if (tabName === 'info') {
                 loadSystemInfo();
